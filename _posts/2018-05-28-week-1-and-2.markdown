@@ -1,0 +1,17 @@
+---
+layout: post
+title:  "Week 1 and 2"
+date:   2018-05-28 10:30:00 -0400
+categories: update
+---
+In the first two weeks my main focus is getting the dense matrix-phi functions and the sparse matrix-phi-vector products to work. Progress has been steady and I believe I can finish my week 4 milestone ahead of schedule.
+
+Initially I set out to implement the phi functions the most straightforward way: by using the recurrence relation directly. However, numerical stability issues came to bite me and even switching to `BigFloat` and mixed precision arithmetic didn't help much. What saved my day was an unamed formula given by Sidje in his Expokit paper [^1], which I have taken the liberty of calling the "Sidje formula". The formula gives a way of computing all orders of phi functions up to `p` by calculating the matrix exponential of an extended matrix. And because `expm` is stable for small arguments, the resulting implementation of dense matrix-phi function `phimv` is also stable. The numerical results can be found in PR [#355](https://github.com/JuliaDiffEq/OrdinaryDiffEq.jl/pull/355).
+
+Starting from week 2 I began developing a utility script for OrdinaryDiffEq that builds upon the Sidje formula and includes Krylov subspace methods for the sparse case. Learning how to write efficient, non-allocating Julia code was a bit challenging, but thankfully my mentor Chris helped me a lot in this case. (PR [#355](https://github.com/JuliaDiffEq/OrdinaryDiffEq.jl/pull/355)). After reviewing Expokit's code and thinking about potential time-saving techniques used by the expRK integrators, I came to the conclusion that it's best to separate the code for Arnoldi iterations and `phimv` approximations that uses the subspace constructed by `arnoldi`. In this way multiple `phimv` calls can use the same results from `arnoldi`, which is frequently the case in expRK algorithms (PR [#361](https://github.com/JuliaDiffEq/OrdinaryDiffEq.jl/pull/361)). After that I went back to the existing expRK integrators and modified them to use the implemented methods instead of depending on Expokit (PR [#365](https://github.com/JuliaDiffEq/OrdinaryDiffEq.jl/pull/365)). This set the stage to implement higher order expRK methods.
+
+To finish things up I did some analysis on the numerical stability/accuracy of the implemented `expmv` and `phimv` methods and compared them with Expokit (Issue [#366](https://github.com/JuliaDiffEq/OrdinaryDiffEq.jl/issues/366)). The concern is that because I didn't use Expokit's inner time stepping approach, the results might be too inaccurate for small Krylov dimension and large time step. And, if this is indeed the case, how can we extend Expokit's approach to higher order phi functions. This will be my main focus in week 3.
+
+Off to a great start I should say. Hope I can keep up with the work in the weeks to come!
+
+[^1]: Sidje, R. B. (1998). Expokit: a software package for computing matrix exponentials. ACM Transactions on Mathematical Software (TOMS), 24(1), 130-156. Theorem 1.
