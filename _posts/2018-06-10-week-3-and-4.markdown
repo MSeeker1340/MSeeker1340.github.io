@@ -1,0 +1,17 @@
+---
+layout: post
+title:  "Week 3 and 4"
+date:   2018-06-10 16:30:00 -0400
+categories: update
+---
+My third week of GSoC started with literature reviews on the latest progress on Krylov approximation to matrix exponentiation/phi-vector products (PR [#243](https://github.com/JuliaDiffEq/OrdinaryDiffEq.jl/issues/243#issuecomment-393296491)). I found the most important of them to be a paper by Niesen & Wright [^1], which most of the recent expRK papers are based on. With the basic parts of the so called phipm algorithm already in place (namely Arnoldi iteration and phiv approximation via the Sidje extended matrix method), I set out to implement the missing pieces: error estimation, internal time stepping and adaptivity.
+
+I finished adding the error estimation/correction functionality in PR [#372](https://github.com/JuliaDiffEq/OrdinaryDiffEq.jl/pull/372). In addition, support for the incomplete orthogonaliztion procedure (IOP) variant of Arnoldi is added which is a natural extension of the previously included Lanczos algorithm for symmetric/Hermitian matrices (PR [#370](https://github.com/JuliaDiffEq/OrdinaryDiffEq.jl/pull/370)).
+
+The internal time stepping method was mainly addressed in PR [#375](https://github.com/JuliaDiffEq/OrdinaryDiffEq.jl/pull/375). The work-precision diagrams provided much insight into the internals of the method, as well as hinting at some of the previously overlooked performance bottlenecks like `ishermitian` and `norm`. 
+
+The last piece of the puzzle was introducing adaptivity into the fray. This turned out to be more difficult than I thought. The algorithms described in the phipm paper is not written in a state that can be easily translated into julia, and the flops estimation section has a lot of nuances attached to it. However after some trials and errors I succeeded in implementing the adaptive algorithm (PR [#376](https://github.com/JuliaDiffEq/OrdinaryDiffEq.jl/pull/376)) as well as doing numerical tests on the scheme in comparison with the fixed implementation.
+
+With the exponential utility functions mostly complete, for the following weeks I will start working on the integrators which use the implemented methods. June will surely be a busy month for me!
+
+[^1]: Niesen, J., & Wright, W. (2009). A Krylov subspace algorithm for evaluating the φ-functions in exponential integrators. arXiv preprint arXiv:0907.4631.
