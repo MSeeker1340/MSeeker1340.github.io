@@ -1,0 +1,11 @@
+---
+layout: post
+title:  "Week 5 and 6"
+date:   2018-06-25 16:30:00 -0400
+categories: update
+---
+For the fifth and sixth week I mainly focused on implementing the classical ExpRK integrators using the infrastructure build in the previous weeks. I started with Issue [#379](https://github.com/JuliaDiffEq/OrdinaryDiffEq.jl/issues/379), which is a high level roadmap for all exponential integrators. There I made the distinction between the classical methods (semilinear formulation and single step Krylov) and the EPIRK methods (Taylor expansion and internal Krylov time stepping). An important design choice is to have a unified interface for both a `SplitODEProblem` (consisiting of a linear and nonlinear part) and a general `ODEProblem`, and for the latter the Jacobian interface of `DiffEqFunction` is used.
+
+PR [#378](https://github.com/JuliaDiffEq/OrdinaryDiffEq.jl/pull/378) is an extension of week 4's work, where like `expv` I made a special case interface for `phiv_timestep` when only the exponential is needed. The majority of work lies in PR [#385](https://github.com/JuliaDiffEq/OrdinaryDiffEq.jl/pull/385) and PR [#395](https://github.com/JuliaDiffEq/OrdinaryDiffEq.jl/pull/395), where I step by step built up the classical ETDRK methods as well as the five-stage Hochbruck-Osteramnn method. As the inner workings of an ExpRK method can be quite complex, especially for in-place versions of the integrators. I tried my best to structure the code in a way that is easy to read and modify. In PR [#401](https://github.com/JuliaDiffEq/OrdinaryDiffEq.jl/pull/401), I did extensive profiling on the implemented methods and optimized memory usage in a few places. Aside from these, there was also a minor PR for DiffEqBase (PR [#108](https://github.com/JuliaDiffEq/DiffEqBase.jl/pull/108)) that updates the old interface of `DiffEqFunction`.
+
+I was not in good physical shape for week 6 so progress has been slower than expected. Still I managed to finish the classical ExpRK methods and are now ready to implement the EPIRK family of integrators.
