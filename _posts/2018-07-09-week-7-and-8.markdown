@@ -1,0 +1,15 @@
+---
+layout: post
+title:  "Week 7 and 8"
+date:   2018-07-09 15:30:00 -0400
+categories: update
+---
+Week 7 and 8 are all about the what this project intends to achieve in the first place: the implementation of EPIRK integrators. Experience writing the classical ExpRK methods proved to be great help, as I'm able to leverage the exisiting infrastructure, especially regarding the exponential utility functions.
+
+The first method I focused on is Exp4 [^1] by Hochbruck, which isn't as fancy as the more recent ones but is nevertheless an important method to benchmark on. The method is implemented in PR [#406](https://github.com/JuliaDiffEq/OrdinaryDiffEq.jl/pull/406) along with modifications to the `phiv_timestep` function that allows it to output the results of intermediate times. This is crucial as the core of EPIRK method construction is to use this ability to speed up the propagation. One problem I found when writing Exp4 is that since adaptation is in play, the caches used need to be dynamically resized but the current implementation doesn't support this. The issue is fixed in PR [#408](https://github.com/JuliaDiffEq/OrdinaryDiffEq.jl/pull/408) where I created a custom cache type that is dynamically resizable.
+
+The EPIRK methods developed by Tokman and her students/collaborators are covered in PR [#410](https://github.com/JuliaDiffEq/OrdinaryDiffEq.jl/pull/410) and [#417](https://github.com/JuliaDiffEq/OrdinaryDiffEq.jl/pull/417). To my surprise the fifth EPIRK5s3 method seems to have way higher error than expected, which is also the case for an alternative implementation of scheme in classical ExpRK form. I'm highly suspicious that there may be a mistake in the formula, but I still haven't found confirmed that this is indeed the case. I definitely need to come back to this in the future.
+
+Even though the EPIRK methods are finished, there's still lots of work for the coming month. The most important job is to port everything I've written so far to Julia v0.7. I have also decided to take a look at adding sparse Jacobian support to the ExpRK integrators, which is essential if we wish to use the integrators in a production level setting.
+
+[^1]: Hochbruck, M., Lubich, C., & Selhofer, H. (1998). Exponential integrators for large systems of differential equations. SIAM Journal on Scientific Computing, 19(5), 1552-1574.
