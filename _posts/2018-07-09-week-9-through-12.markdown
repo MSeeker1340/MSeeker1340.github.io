@@ -1,0 +1,17 @@
+---
+layout: post
+title:  "Week 9 through 12"
+date:   2018-08-06 14:00:00 -0400
+categories: update
+---
+After finishing the ExpRK integrators, I switched my focus to adding custom Jacobian support for the exponential algorithms, which then turned into an independent project on its own.
+
+Previously, the jacobian used by in-place ExpRK methods is assumed to be dense. Not only is this not general, it also undermines the premise of krylov ExpRK, which relies on sparse linear operator and cheap matrix-vector multiplication. To support custom jacobian types, I need to dig into the internals of DiffEqBase and modify the `calc_J!` interface used by OrdinaryDiffEq.
+
+As it turned out, an important issue in OrdinaryDiffEq, lazy W operator support for implicit methods, ties in with custom jacobian types closely. The W operator is defined as `W = MM - dtgamma * J`, where `MM` is the mass matrix, `dtgamma` is a scalar related to the time step and `J` is the jacobian. The hope is that for linear solvers that do not rely on the concrete form of `W` (such as GMRES), we do not need to construct `W` explicitly but instead can treat it lazily, using the jacobian as a basis. After discussing with my mentor, I decided to expand my original goal and tackle this issue as well.
+
+For the first step, I picked up my work for DiffEqOperators in the community bonding period and implemented the lazy operator composition utilities (PR [#67](https://github.com/JuliaDiffEq/DiffEqOperators.jl/pull/67)). This served as a basis for the `WOperator` type used by OrdinaryDiffEq's derivative utilities. PR [#438](https://github.com/JuliaDiffEq/OrdinaryDiffEq.jl/pull/438) added support for custom jacobian types for the exponential methods and finally PR [#443](https://github.com/JuliaDiffEq/OrdinaryDiffEq.jl/pull/443) completed the update for lazy W and implicit methods. I also implemented similar changes to StochasticDiffEq (PR [#96](https://github.com/JuliaDiffEq/StochasticDiffEq.jl/pull/96)). Meanwhile, I also worked with my mentor and fellow GSoC students to upgrade JuliaDiffEq to v0.7. In particular, I was responsible for implementing the changes related to the mass matrices in DiffEqBase.
+
+Finally, as suggested by my mentor, I went back to ExpRK and implemented the adaptive Rosenbrock methods Exprb32 and Exprb43. I'm still trying to find out what's wrong with my implementation though, as the convergence tests seem to suggest a lower order than the analytical one. I've also isolated the exponential utility functions (phi calculation, arnoldi iteration, etc) to a separate package [ExponentialUtilities](https://github.com/JuliaDiffEq/ExponentialUtilities.jl).
+
+The Summer of Code is coming to a close, and I'm glad to say that I've accomplished a lot during the period. I will be wrapping things up and adding missing documentation this week to prepare for my final code submission. However, my time with the JuliaDiffEq community is far from over and I'm looking forward to contributing more in the months to come.
