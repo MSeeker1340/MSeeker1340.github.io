@@ -1,0 +1,118 @@
+---
+layout: post
+title:  "Summer of Code Summary"
+date:   2018-08-10 23:59:00 -0400
+categories: summary
+---
+
+During the summer, I contributed to multiple repositories under the JuliaDiffEq organization and completed the implementation of Exponential Runge-Kutta (ExpRK) integrators. My work can be roughly summarized into three parts: the exponential utilities, the integrators and sparse Jacobian support.
+
+# Exponential Utilities
+
+The development of utility functions/types used by the exponential occurs on the first four weeks and is summarized by the following blog posts:
+
+- [Week 1 and 2](https://mseeker1340.github.io/update/2018/05/28/week-1-and-2.html)
+- [Week 3 and 4](https://mseeker1340.github.io/update/2018/06/10/week-3-and-4.html)
+
+Near the end of GSoC, I also migrated the utilities to a separate package [ExponentialUtilities](https://github.com/JuliaDiffEq/ExponentialUtilities.jl) under JuliaDiffEq.
+
+## Merged Pull Requests
+
+OrdinaryDiffEq:
+
+- [Exponential utilities - phi functions #355](https://github.com/JuliaDiffEq/OrdinaryDiffEq.jl/pull/355)
+- [Rewriting `phimv` and `arnoldi` #361](https://github.com/JuliaDiffEq/OrdinaryDiffEq.jl/pull/361)
+- [Happy-breakdown detection and `t` parameter for `phimv` #365](https://github.com/JuliaDiffEq/OrdinaryDiffEq.jl/pull/365)
+- [Lanczos algorithm for symmetric/Hermitian matrices #370](https://github.com/JuliaDiffEq/OrdinaryDiffEq.jl/pull/370)
+- [Additional functionalities for exp utility: error estimate and IOP #372](https://github.com/JuliaDiffEq/OrdinaryDiffEq.jl/pull/372)
+- [Krylov Phiv internal time stepping #375](https://github.com/JuliaDiffEq/OrdinaryDiffEq.jl/pull/375)
+- [Adaptation for `phiv_timestep(!)` #376](https://github.com/JuliaDiffEq/OrdinaryDiffEq.jl/pull/376)
+- [Time-stepping Krylov: special case for `expv_timestep` #378](https://github.com/JuliaDiffEq/OrdinaryDiffEq.jl/pull/378)
+- [Packaged cache type for `expv` and `phiv` #408](https://github.com/JuliaDiffEq/OrdinaryDiffEq.jl/pull/408)
+
+## Issues and Discussions
+
+OrdinaryDiffEq:
+
+- [Adaptive Krylov exponential integrators (EPIRK) #243](https://github.com/JuliaDiffEq/OrdinaryDiffEq.jl/issues/243)
+- [expmv and phimv performance #366](https://github.com/JuliaDiffEq/OrdinaryDiffEq.jl/issues/366)
+
+# ExpRK Integrators
+
+I implemented the infrastructure for the ExpRK integrators and wrote most of the algorithms during week 5 to 8. The adaptive Exponential Rosenbrock methods were added on week 12 and I plan to also add the SETD1 method for StochasticDiffEq after GSoC. Blog posts for this period:
+
+- [Week 5 and 6](https://mseeker1340.github.io/update/2018/06/25/week-5-and-6.html)
+- [Week 6 and 7](https://mseeker1340.github.io/update/2018/07/09/week-7-and-8.html)
+
+## Merged Pull Requrests
+
+DiffEqBase:
+
+- [Update arguments style for `DiffEqFunction` #108](https://github.com/JuliaDiffEq/DiffEqBase.jl/pull/108)
+- [Better in-place detection for `DiffEqFunction` #111](https://github.com/JuliaDiffEq/DiffEqBase.jl/pull/111)
+
+OrdinaryDiffEq:
+
+- [ETDRK integrators #385](https://github.com/JuliaDiffEq/OrdinaryDiffEq.jl/pull/385)
+- [Hochbruck-Ostermann Method #395](https://github.com/JuliaDiffEq/OrdinaryDiffEq.jl/pull/395)
+- [Optimizing the classical ExpRK integrators #401](https://github.com/JuliaDiffEq/OrdinaryDiffEq.jl/pull/401)
+- [Exp4 using EPIRK #406](https://github.com/JuliaDiffEq/OrdinaryDiffEq.jl/pull/406)
+- [Fourth order EPIRK methods #410](https://github.com/JuliaDiffEq/OrdinaryDiffEq.jl/pull/410)
+- [Fifth order EPIRK methods #417](https://github.com/JuliaDiffEq/OrdinaryDiffEq.jl/pull/417)
+- [Adaptive exponential Rosenbrock integrators #463](https://github.com/JuliaDiffEq/OrdinaryDiffEq.jl/pull/463)
+
+## WIP Pull Requests
+
+OrdinaryDiffEq:
+
+- [Update ExpRK alongside ExponentialUtilities #472](https://github.com/JuliaDiffEq/OrdinaryDiffEq.jl/pull/472)
+
+DiffEqDocs:
+
+- [Update ExpRK documentation #144](https://github.com/JuliaDiffEq/DiffEqDocs.jl/pull/144)
+
+DiffEqDevDocs:
+
+- [ExpRK algorithm development guide #9](https://github.com/JuliaDiffEq/DiffEqDevDocs.jl/pull/9)
+
+## Issues and Discussions
+
+OrdinaryDiffEq:
+
+- [Designing the exponential integrators #379](https://github.com/JuliaDiffEq/OrdinaryDiffEq.jl/issues/379)
+- [Full list of exponential integrators to implement #394](https://github.com/JuliaDiffEq/OrdinaryDiffEq.jl/issues/394)
+
+# Sparse Jacobian Support & Lazy W Operator
+
+This started as an attempt to add sparse Jacobian support for the ExpRK integrators and ended up with a systematic improvement of the implicit handling functionality of JuliaDiffEq. I also helped upgrading JuliaDiffEq to v0.7 during this period. Blog post for this period:
+
+- [Week 9 through 12](https://mseeker1340.github.io/update/2018/08/06/week-9-through-12.html)
+
+## Merged Pull Requests
+
+DiffEqBase:
+
+- [Update handling of `jac_prototype` #123](https://github.com/JuliaDiffEq/DiffEqBase.jl/pull/123)
+- [Mass matrix change #126](https://github.com/JuliaDiffEq/DiffEqBase.jl/pull/126)
+
+OrdinaryDiffEq:
+
+- [Update ExpRK to use `calc_J!` and new DiffEqOperators #438](https://github.com/JuliaDiffEq/OrdinaryDiffEq.jl/pull/438)
+- [Lazy W operator support #443](https://github.com/JuliaDiffEq/OrdinaryDiffEq.jl/pull/443)
+
+DiffEqOperators:
+
+- [`size(A, n)` hotfix for array operator #66](https://github.com/JuliaDiffEq/DiffEqOperators.jl/pull/66)
+- [Basic operator composition #67](https://github.com/JuliaDiffEq/DiffEqOperators.jl/pull/67)
+
+StochasticDiffEq:
+
+- [Update implicit methods to use lazy W #96](https://github.com/JuliaDiffEq/StochasticDiffEq.jl/pull/96)
+
+Minor PRs for v0.7 update:
+
+- DiffEqBase: [#124](https://github.com/JuliaDiffEq/DiffEqBase.jl/pull/124), [#129](https://github.com/JuliaDiffEq/DiffEqBase.jl/pull/129)
+- OrdinaryDiffEq: [#424](https://github.com/JuliaDiffEq/OrdinaryDiffEq.jl/pull/424), [#455](https://github.com/JuliaDiffEq/OrdinaryDiffEq.jl/pull/455), [#460](https://github.com/JuliaDiffEq/OrdinaryDiffEq.jl/pull/460). [#461](https://github.com/JuliaDiffEq/OrdinaryDiffEq.jl/pull/461)
+- StochasticDiffEq: [#93](https://github.com/JuliaDiffEq/StochasticDiffEq.jl/pull/93)
+- DiffEqOperators: [#69](https://github.com/JuliaDiffEq/DiffEqOperators.jl/pull/69)
+- DiffEqProblemLibrary: [#31](https://github.com/JuliaDiffEq/DiffEqProblemLibrary.jl/pull/31)
