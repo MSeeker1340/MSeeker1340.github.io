@@ -2,7 +2,7 @@
 layout: post
 title:  "Summer of Code Summary"
 date:   2018-08-10 23:59:00 -0400
-categories: summary
+categories: update
 ---
 
 During the summer, I contributed to multiple repositories under the JuliaDiffEq organization and completed the implementation of Exponential Runge-Kutta (ExpRK) integrators. My work can be roughly summarized into three parts: the exponential utilities, the integrators and sparse Jacobian support.
