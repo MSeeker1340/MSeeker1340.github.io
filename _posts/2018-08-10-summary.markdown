@@ -7,7 +7,7 @@ categories: update
 
 During the summer, I contributed to multiple repositories under the JuliaDiffEq organization and completed the implementation of Exponential Runge-Kutta (ExpRK) integrators. My work can be roughly summarized into three parts: the exponential utilities, the integrators and sparse Jacobian support.
 
-# Exponential Utilities
+## Exponential Utilities
 
 The development of utility functions/types used by the exponential occurs on the first four weeks and is summarized by the following blog posts:
 
@@ -16,7 +16,7 @@ The development of utility functions/types used by the exponential occurs on the
 
 Near the end of GSoC, I also migrated the utilities to a separate package [ExponentialUtilities](https://github.com/JuliaDiffEq/ExponentialUtilities.jl) under JuliaDiffEq.
 
-## Merged Pull Requests
+### Merged Pull Requests
 
 OrdinaryDiffEq:
 
@@ -30,21 +30,21 @@ OrdinaryDiffEq:
 - [Time-stepping Krylov: special case for `expv_timestep` #378](https://github.com/JuliaDiffEq/OrdinaryDiffEq.jl/pull/378)
 - [Packaged cache type for `expv` and `phiv` #408](https://github.com/JuliaDiffEq/OrdinaryDiffEq.jl/pull/408)
 
-## Issues and Discussions
+### Issues and Discussions
 
 OrdinaryDiffEq:
 
 - [Adaptive Krylov exponential integrators (EPIRK) #243](https://github.com/JuliaDiffEq/OrdinaryDiffEq.jl/issues/243)
 - [expmv and phimv performance #366](https://github.com/JuliaDiffEq/OrdinaryDiffEq.jl/issues/366)
 
-# ExpRK Integrators
+## ExpRK Integrators
 
 I implemented the infrastructure for the ExpRK integrators and wrote most of the algorithms during week 5 to 8. The adaptive Exponential Rosenbrock methods were added on week 12 and I plan to also add the SETD1 method for StochasticDiffEq after GSoC. Blog posts for this period:
 
 - [Week 5 and 6](https://mseeker1340.github.io/update/2018/06/25/week-5-and-6.html)
 - [Week 6 and 7](https://mseeker1340.github.io/update/2018/07/09/week-7-and-8.html)
 
-## Merged Pull Requrests
+### Merged Pull Requrests
 
 DiffEqBase:
 
@@ -61,7 +61,7 @@ OrdinaryDiffEq:
 - [Fifth order EPIRK methods #417](https://github.com/JuliaDiffEq/OrdinaryDiffEq.jl/pull/417)
 - [Adaptive exponential Rosenbrock integrators #463](https://github.com/JuliaDiffEq/OrdinaryDiffEq.jl/pull/463)
 
-## WIP Pull Requests
+### WIP Pull Requests
 
 OrdinaryDiffEq:
 
@@ -75,20 +75,20 @@ DiffEqDevDocs:
 
 - [ExpRK algorithm development guide #9](https://github.com/JuliaDiffEq/DiffEqDevDocs.jl/pull/9)
 
-## Issues and Discussions
+### Issues and Discussions
 
 OrdinaryDiffEq:
 
 - [Designing the exponential integrators #379](https://github.com/JuliaDiffEq/OrdinaryDiffEq.jl/issues/379)
 - [Full list of exponential integrators to implement #394](https://github.com/JuliaDiffEq/OrdinaryDiffEq.jl/issues/394)
 
-# Sparse Jacobian Support & Lazy W Operator
+## Sparse Jacobian Support & Lazy W Operator
 
 This started as an attempt to add sparse Jacobian support for the ExpRK integrators and ended up with a systematic improvement of the implicit handling functionality of JuliaDiffEq. I also helped upgrading JuliaDiffEq to v0.7 during this period. Blog post for this period:
 
 - [Week 9 through 12](https://mseeker1340.github.io/update/2018/08/06/week-9-through-12.html)
 
-## Merged Pull Requests
+### Merged Pull Requests
 
 DiffEqBase:
 
